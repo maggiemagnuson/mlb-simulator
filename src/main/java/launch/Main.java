@@ -92,7 +92,7 @@ public class Main {
 		System.out.print(gameMenu);
 		//System.out.println("Pick game number (0 to exit): ");
 		//gameNumber = Integer.parseInt(scanner.nextLine());
-		FileWriter fw = new FileWriter("/Users/z001hqv/Desktop/hitting-projections/hitting_projections_" + gameDate + ".csv");
+		FileWriter fw = new FileWriter("./hitting_projections_" + gameDate + ".csv");
 		PrintWriter writer = new PrintWriter(fw);
 
 		for (Integer game : gameIdHash.keySet()){
