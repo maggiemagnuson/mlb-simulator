@@ -60,6 +60,12 @@ public class MonteCarloGame {
 	HashMap<Integer, DescriptiveStatistics> hitterAvg = new HashMap<Integer, DescriptiveStatistics>();
 	HashMap<Integer, DescriptiveStatistics> hitterOBP = new HashMap<Integer, DescriptiveStatistics>();
 	HashMap<Integer, DescriptiveStatistics> hitterSLG = new HashMap<Integer, DescriptiveStatistics>();
+
+	// This is modified code.
+	HashMap<Integer, DescriptiveStatistics> hitter2B = new HashMap<Integer, DescriptiveStatistics>();
+	HashMap<Integer, DescriptiveStatistics> hitter3B = new HashMap<Integer, DescriptiveStatistics>();
+	HashMap<Integer, DescriptiveStatistics> hitterHR = new HashMap<Integer, DescriptiveStatistics>();
+
 	private HashMap<Integer, HitterBoxScoreStats> hitterBoxScore;
 
 	//-----------------Constructors------------------------
@@ -250,6 +256,10 @@ public class MonteCarloGame {
 	        DescriptiveStatistics avgDS  = hitterAvg.get(boxScoreStats.getPlayerID());
 	        DescriptiveStatistics obpDS  = hitterOBP.get(boxScoreStats.getPlayerID());
 	        DescriptiveStatistics slgDS  = hitterSLG.get(boxScoreStats.getPlayerID());
+	        DescriptiveStatistics doubleDS = hitter2B.get(boxScoreStats.getPlayerID());
+			DescriptiveStatistics tripleDS = hitter3B.get(boxScoreStats.getPlayerID());
+			DescriptiveStatistics hrDS = hitterHR.get(boxScoreStats.getPlayerID());
+
 	        if(abDS == null) // assume if one null all are
 	        {
 	        	abDS   = new DescriptiveStatistics();
@@ -261,6 +271,9 @@ public class MonteCarloGame {
 	 	        avgDS  = new DescriptiveStatistics();
 	 	        obpDS  = new DescriptiveStatistics();
 	 	        slgDS  = new DescriptiveStatistics();
+	 	        doubleDS = new DescriptiveStatistics();
+	 	        tripleDS = new DescriptiveStatistics();
+	 	        hrDS = new DescriptiveStatistics();
 	        }
 	        
 	        abDS.addValue(boxScoreStats.getAtBats());
@@ -272,6 +285,9 @@ public class MonteCarloGame {
 	        avgDS.addValue(boxScoreStats.getBattingAve());
 	        obpDS.addValue(boxScoreStats.getOnBasePer());
 	        slgDS.addValue(boxScoreStats.getSluggingPer());
+	        doubleDS.addValue(boxScoreStats.getDoubles());
+	        tripleDS.addValue(boxScoreStats.getTriples());
+	        hrDS.addValue(boxScoreStats.getHr());
 	        
 	        hitterAB.put(boxScoreStats.getPlayerID(), abDS);
 	        hitterRuns.put(boxScoreStats.getPlayerID(), runsDS);
@@ -282,6 +298,9 @@ public class MonteCarloGame {
 	        hitterAvg.put(boxScoreStats.getPlayerID(), avgDS);
 	        hitterOBP.put(boxScoreStats.getPlayerID(), obpDS);
 	        hitterSLG.put(boxScoreStats.getPlayerID(), slgDS);
+	        hitter2B.put(boxScoreStats.getPlayerID(), doubleDS);
+	        hitter3B.put(boxScoreStats.getPlayerID(), tripleDS);
+	        hitterHR.put(boxScoreStats.getPlayerID(),hrDS);
 	    }
 		
 	}
@@ -1017,7 +1036,28 @@ public class MonteCarloGame {
 	public void setHitterSLG(HashMap<Integer, DescriptiveStatistics> hitterSLG) {
 		this.hitterSLG = hitterSLG;
 	}
-	
-	
 
+	public HashMap<Integer, DescriptiveStatistics> getHitter2B() {
+		return hitter2B;
+	}
+
+	public void setHitter2B(HashMap<Integer, DescriptiveStatistics> hitter2B) {
+		this.hitter2B = hitter2B;
+	}
+
+	public HashMap<Integer, DescriptiveStatistics> getHitter3B() {
+		return hitter3B;
+	}
+
+	public void setHitter3B(HashMap<Integer, DescriptiveStatistics> hitter3B) {
+		this.hitter3B = hitter3B;
+	}
+
+	public HashMap<Integer, DescriptiveStatistics> getHitterHR() {
+		return hitterHR;
+	}
+
+	public void setHitterHR(HashMap<Integer, DescriptiveStatistics> hitterHR) {
+		this.hitterHR = hitterHR;
+	}
 }
