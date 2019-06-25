@@ -27,7 +27,7 @@ public class Main {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	
 	private final static String USER_AGENT = "Snoozle";
-	private final static int numOfMCGames = 1000;
+	private final static int numOfMCGames = 10000;
 	
 	// Attributes
 	private static HashMap<Integer, String> gameIdHash = new HashMap<Integer, String>();
@@ -45,17 +45,21 @@ public class Main {
 		Scanner scanner = new Scanner(System.in);
 		
 		int gameNumber = -1;
-		// Basic do while menu loop
-		//do
-		//{
+		
 		// Gets the date for pulling data
-		//System.out.flush();
-		//System.out.println("Pick game date (YYYY-MM-DD) OR 0 to exit: ");
+		System.out.flush();
+		System.out.println("Select <Enter> to use today's date:");
+		String choice = scanner.nextLine();
+		String gameDate;
+		if (!choice.equals("")){
+			System.out.println("Pick game date (YYYY-MM-DD): ");
+			gameDate = scanner.nextLine();
+		} else {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date realDate = new Date();
+			gameDate = dateFormat.format(realDate);
+		}
 
-		//String gameDate = scanner.nextLine();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date realDate = new Date();
-		String gameDate = dateFormat.format(realDate);
 		System.out.println("Game date being used (YYYY-MM-DD): " + gameDate);
 		// Test validity of date
 		try {
@@ -68,7 +72,6 @@ public class Main {
 		} catch (ParseException e) {
 			System.out.println("Invalid date, please try again");
 			System.exit(1);
-			//continue;
 		}
 
 		// Sends date to server GET call
@@ -90,8 +93,6 @@ public class Main {
 		// Prints out game selection menu
 		System.out.println("Games for " + gameDate);
 		System.out.print(gameMenu);
-		//System.out.println("Pick game number (0 to exit): ");
-		//gameNumber = Integer.parseInt(scanner.nextLine());
 		FileWriter fw = new FileWriter("./hitting_projections_" + gameDate + ".csv");
 		PrintWriter writer = new PrintWriter(fw);
 
@@ -161,7 +162,7 @@ public class Main {
 						System.out.println("=======================================================================");
 						System.out.println(" ");
 					} else {
-						System.out.println(awayTeam + " vs. " + homeTeam + "does not have have proper line ups set.");
+						System.out.println(awayTeam + " vs. " + homeTeam + " does not have have proper line ups set.");
 					}
 
 				} // if(jsonObj.get("success").getAsBoolean())
@@ -262,14 +263,15 @@ public class Main {
 		
 		if (!hasHeader){
 			try{
-				writer.println(String.format("%-30s\tTeam\tAB\tR\tH\tRBI\tBB\tAVG\tOBP\tSLG","Player"));
+				writer.println(String.format("%-30s\tTeam\tAB\tR\tH\t2B\t3B\tHR\tRBI\tBB\tAVG\tOBP\tSLG","Player"));
 				hasHeader = true;
 			} catch(Exception e){
 				e.printStackTrace();
 			}
 
 		}
-		System.out.println(String.format("%-30s\tTeam\tAB\tR\tH\tRBI\tBB\tAVG\tOBP\tSLG","Player"));
+		System.out.println(String.format("%-30s\tTeam\tAB\tR\tH\t2B\t3B\tHR\tRBI\tBB\tAVG\tOBP\tSLG","Player"));
+        System.out.println("--------------------------------------------------------------------------------");
 
 		for(BattingStats battingStats: lineUp)
 		{
@@ -277,12 +279,15 @@ public class Main {
 			String playerName = battingStats.getPlayerName();
 			try{
 
-				String outputString = String.format("%-30s\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.3f\t%.3f\t%.3f",
+				String outputString = String.format("%-30s\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.3f\t%.3f\t%.3f",
 						playerName,
 						team.replace("\"", ""),
 						mcGame.getHitterAB().get(playerID).getMean(),
 						mcGame.getHitterRuns().get(playerID).getMean(),
 						mcGame.getHitterHits().get(playerID).getMean(),
+						mcGame.getHitter2B().get(playerID).getMean(),
+						mcGame.getHitter3B().get(playerID).getMean(),
+						mcGame.getHitterHR().get(playerID).getMean(),
 						mcGame.getHitterRBI().get(playerID).getMean(),
 						mcGame.getHitterBB().get(playerID).getMean(),
 						mcGame.getHitterAvg().get(playerID).getMean(),
